@@ -12,6 +12,8 @@ Node *genNode(int val){
 	node->left = NULL;
 	node->right = NULL;
 	node->parent = NULL;
+
+	return node;
 }
 
 void leftRotation(Node **root, Node *x){
