@@ -19,14 +19,20 @@ typedef struct Node{
 }Node;
 
 
-// Funcao que efetua uma rotacao a direita //
-// Recebe um ponteiro do tipo Node que causa violacao //
-void rightRotate(Node *node);
+// Funcao que gera cria um no e retorna o seu ponteiro //
+// Recebe um valor inteiro //
+Node *genNode(int val){
+
 
 
 // Funcao que efetua uma rotacao a esquerda //
-// Recebe um ponteiro do tipo Node que causa violacao //
-void leftRotate(Node *node);
+// Recebe o ponteiro que aponta para a raiz da arvore e um ponteiro do no que causa violacao //
+void leftRotate(Node **root, Node *x);
+
+
+// Funcao que efetua uma rotacao a direita //
+// Recebe o ponteiro que aponta para a raiz da arvore e um ponteiro do no que causa violacao //
+void rightRotate(Node **root, Node *y);
 
 
 #endif
