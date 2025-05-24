@@ -10,7 +10,7 @@ typedef enum Color{
 
 
 // Estrutura de um no da arvore rubro-negra //
-typedef Node{
+typedef struct Node{
 	int val;
 	Color color;
 	struct Node* left;
@@ -20,12 +20,12 @@ typedef Node{
 
 
 // Funcao que efetua uma rotacao a direita //
-// Recebe um ponteiro do tipo Node que causa inviolacao //
+// Recebe um ponteiro do tipo Node que causa violacao //
 void rightRotate(Node *node);
 
 
 // Funcao que efetua uma rotacao a esquerda //
-// Recebe um ponteiro do tipo Node que causa inviolacao //
+// Recebe um ponteiro do tipo Node que causa violacao //
 void leftRotate(Node *node);
 
 
