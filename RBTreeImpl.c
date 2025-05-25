@@ -71,6 +71,19 @@ Bool searchRB(Node *root, int val){
 	return false;
 }
 
+Node *searchRBNode(Node *root, int val){
+	while(root != NULL){
+		if(val < root->val)
+			root = root->left;
+		else if(val > root->val)
+			root = root->right;
+		else
+			return root;
+	}
+
+	return NULL;
+}
+
 void insertFix(Node **root, Node *z) {
 	while(z != *root && z->parent->color == RED){
 		Node *y;
@@ -97,7 +110,7 @@ void insertFix(Node **root, Node *z) {
 				// Violcao 3: z eh filho a esquerda - rotacao direita no avo
 				z->parent->color = BLACK;
 				z->parent->parent->color = RED;
-				rigthRotate(root, z->parent->parent);
+				rightRotate(root, z->parent->parent);
 			}
 
 		} else{
@@ -157,4 +170,72 @@ void insertRB(Node **root, int val){
 
 	//Funcao de correcao
 	insertFix(root, z);
+}
+
+void swapNodes(Node **root, Node *out, Node *in){
+	if(out->parent == NULL)
+		*root = in;
+	else if(out == out->parent->left)
+		out->parent->left = in;
+	else
+		out->parent->right = in;
+
+	if(in != NULL)
+		in->parent = out->parent;
+}
+
+void removeRB(Node **root, int val){
+	Node *z = searchRBNode(*root, val);
+
+	if(z == NULL)
+		return;
+
+	Node *y = z;
+	Color yOriginalColor = y->color;
+	Node *x;
+
+	// Caso 1: Z so tem no maximo um filho a direita
+	if(z->left == NULL){
+		x = z->right;
+		swapNodes(root, z, z->right);
+	}
+
+	// Caso 2: Z so tem no maixmo um filho a esquerda
+	else if(z->right == NULL){
+		x = z->left;
+		swapNodes(root, z, z->left);
+	}
+
+	// Case 3: Z tem os dois filhos
+	else{
+		// Assume o menor da subarvore a direita
+		y = z->right;
+		while(y->left != NULL)
+			y = y->left;
+
+		yOriginalColor = y->color;
+		x = y->right;
+
+		if(y->parent == z){
+			if(x != NULL)
+				x->parent = y;
+		} else{
+			swapNodes(root, y, y->right);
+			y->right = z->right;
+			y->right->parent = y;
+		}
+
+
+		swapNodes(root, z, y);
+		y->left = z->left;
+		y->left->parent = y;
+		y->color = z->color;
+	}
+
+	free(z);
+
+	
+	// Se y era preto, pode ter ocorrido violacao
+	if(yOriginalColor == BLACK)
+		removeFix(root, x);
 }
