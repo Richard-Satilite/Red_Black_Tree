@@ -67,7 +67,12 @@ void swapNodes(Node **root, Node *out, Node *in);
 
 
 // Funcao que efetua correcao de violacoes causadas pela insercao //
-// Recebe um pornteiro que aponta para o ponteiro da raiz da arovre e um ponteiro do no que foi inserido //
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore e um ponteiro do no que foi inserido //
 void insertFix(Node **root, Node *z);
+
+
+// Funcao que efetua correcao de violacoes causadas pela remocao //
+// Recebe um ponteiro que aponta para o potenrio da raiz da arvore e um ponteiro do no que substituiu o no removido //
+void removeFix(Node **root, Node *x);
 
 #endif

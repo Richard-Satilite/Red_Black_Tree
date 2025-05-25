@@ -184,6 +184,82 @@ void swapNodes(Node **root, Node *out, Node *in){
 		in->parent = out->parent;
 }
 
+void removeFix(Node **root, Node *x){
+	while (x != *root && (x == NULL || x->color == BLACK)) {
+		if (x == x->parent->left) {
+			Node *w = x->parent->right;  // irmão
+
+			// Caso 1: w eh vermelho
+			if (w != NULL && w->color == RED) {
+				w->color = BLACK;
+				x->parent->color = RED;
+				leftRotate(root, x->parent);
+				w = x->parent->right;
+			}
+
+			// Caso 2: w eh preto e os dois filhos de w são pretos
+			if ((w->left == NULL || w->left->color == BLACK) && (w->right == NULL || w->right->color == BLACK)) {
+				w->color = RED;
+				x = x->parent;
+		
+			} else {
+			
+				// Caso 3: w eh preto, w.left é vermelho e w.right é preto
+				if (w->right == NULL || w->right->color == BLACK) {
+					if (w->left != NULL)
+						w->left->color = BLACK;
+					w->color = RED;
+					rightRotate(root, w);
+					w = x->parent->right;
+				}
+
+				// Caso 4: w.right eh vermelho
+				w->color = x->parent->color;
+				x->parent->color = BLACK;
+				if (w->right != NULL)
+					w->right->color = BLACK;
+				leftRotate(root, x->parent);
+				x = *root;
+			}
+
+        	} else {
+
+			// Simetrico ao caso acima (x eh filho da direita)
+			Node *w = x->parent->left;
+
+			if (w != NULL && w->color == RED) {
+				w->color = BLACK;
+				x->parent->color = RED;
+				rightRotate(root, x->parent);
+				w = x->parent->left;
+			}
+
+			if ((w->right == NULL || w->right->color == BLACK) && (w->left == NULL || w->left->color == BLACK)) {
+				w->color = RED;
+				x = x->parent;
+			} else {
+				if (w->left == NULL || w->left->color == BLACK) {
+					if (w->right != NULL)
+						w->right->color = BLACK;
+					w->color = RED;
+					leftRotate(root, w);
+					w = x->parent->left;
+				}
+
+				w->color = x->parent->color;
+				x->parent->color = BLACK;
+				if (w->left != NULL)
+					w->left->color = BLACK;
+				rightRotate(root, x->parent);
+				x = *root;
+			}
+		}
+	}
+
+	if (x != NULL)
+	x->color = BLACK;
+}
+
 void removeRB(Node **root, int val){
 	Node *z = searchRBNode(*root, val);
 
