@@ -56,3 +56,47 @@ void rightRotate(Node **root, Node *y){
 	x->right = y;
 	y->parent = x;
 }
+
+Bool searchRB(Node *root, int val){
+
+	while(root != NULL){
+		if(val < root->val)
+			root = root->left;
+		else if(val > root->val)
+			root = root->right;
+		else
+			return true;
+	}
+
+	return false;
+}
+
+
+void insertRB(Node **root, int val){
+	Node *z = genNode(val);
+
+	if(z == NULL || searchRB(*root, val))
+		return;
+	
+	Node *y = NULL;
+	Node *x = *root;
+
+	while(x != NULL){
+		y = x;
+		if(val < x->val)
+			x = x->left;
+		else
+			x = x->right;
+	}
+
+	z->parent = y;
+
+	if(y == NULL)
+		*root = z;
+	else if(z->val < y->val)
+		y->left = z;
+	else
+		y->right = z;
+
+	//Funcao de correcao
+}
