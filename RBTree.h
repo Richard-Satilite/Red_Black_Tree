@@ -54,4 +54,10 @@ void removeRB(Node **root, int val);
 // Recebe um ponteiro que aponta para a raiz da arvore e o valor a ser buscado //
 Bool searchRB(Node *root, int val);
 
+
+// Funcao que efetua correcao de violacoes causadas pela insercao //
+// Recebe um pornteiro que aponta para o ponteiro da raiz da arovre e um ponteiro do no que foi inserido //
+void insertFix(Node **root, Node *z);
+
+
 #endif

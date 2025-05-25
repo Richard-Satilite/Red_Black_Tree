@@ -16,7 +16,7 @@ Node *genNode(int val){
 	return node;
 }
 
-void leftRotation(Node **root, Node *x){
+void leftRotate(Node **root, Node *x){
 	Node* y = x->right;
 	x->right = y->left;
 
@@ -71,6 +71,63 @@ Bool searchRB(Node *root, int val){
 	return false;
 }
 
+void insertFix(Node **root, Node *z) {
+	while(z != *root && z->parent->color == RED){
+		Node *y;
+
+		if(z->parent == z->parent->parent->left){
+			y = z->parent->parent->right; //Tio a direita
+
+			if(y != NULL && y->color == RED){
+				// Violacao 1: Pai e tio vermelhos
+
+				z->parent->color = BLACK;
+				y->color = BLACK;
+				z->parent->parent->color = RED;
+				z = z->parent->parent;
+			} else{
+				// Violacao 2 e 3: Tio e preto
+
+				if(z == z->parent->right){
+					// Violacao 2: filho a direita - rotacao esquerda no pai
+					z = z->parent;
+					leftRotate(root, z);
+				}
+
+				// Violcao 3: z eh filho a esquerda - rotacao direita no avo
+				z->parent->color = BLACK;
+				z->parent->parent->color = RED;
+				rigthRotate(root, z->parent->parent);
+			}
+
+		} else{
+			y = z->parent->parent->left; // Tio a esquerda
+
+			if(y != NULL && y->color == RED){
+				z->parent->color = BLACK;
+				y->color = BLACK;
+				z->parent->parent->color = RED;
+				z = z->parent->parent;
+			} else{
+				if(z == z->parent->left){
+					// Violacao 2
+
+					z = z->parent;
+					rightRotate(root, z);
+				}
+
+				//Violacao 3
+
+				z->parent->color = BLACK;
+				z->parent->parent->color = RED;
+				leftRotate(root, z->parent->parent);
+			}
+		}
+	}
+
+	// Raiz sempre preta
+	(*root)->color = BLACK;
+}
 
 void insertRB(Node **root, int val){
 	Node *z = genNode(val);
@@ -99,4 +156,5 @@ void insertRB(Node **root, int val){
 		y->right = z;
 
 	//Funcao de correcao
+	insertFix(root, z);
 }
