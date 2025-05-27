@@ -106,7 +106,7 @@ void insertFix(Node **root, Node *z) {
 					leftRotate(root, z);
 				}
 
-				// Violcao 3: z eh filho a esquerda - rotacao direita no avo
+				// Violacao 3: z eh filho a esquerda - rotacao direita no avo
 				z->parent->color = BLACK;
 				z->parent->parent->color = RED;
 				rightRotate(root, z->parent->parent);
@@ -275,7 +275,7 @@ void removeRB(Node **root, int val){
 		swapNodes(root, z, z->right);
 	}
 
-	// Caso 2: Z so tem no maixmo um filho a esquerda
+	// Caso 2: Z so tem no maximo um filho a esquerda
 	else if(z->right == NULL){
 		x = z->left;
 		swapNodes(root, z, z->left);

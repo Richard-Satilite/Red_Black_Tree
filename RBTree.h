@@ -58,7 +58,7 @@ Bool searchRB(Node *root, int val);
 
 // Funcao que realiza a busca de um valor na arvore e retorna o no //
 // Recebe um ponteiro que aponta para a raiz da arvore e o valor a ser buscado //
-Node *seachRBNode(Node *root, int val);
+Node *searchRBNode(Node *root, int val);
 
 
 // Funcao que realiza a troca entre os nos da arvore //
@@ -72,7 +72,26 @@ void insertFix(Node **root, Node *z);
 
 
 // Funcao que efetua correcao de violacoes causadas pela remocao //
-// Recebe um ponteiro que aponta para o potenrio da raiz da arvore e um ponteiro do no que substituiu o no removido //
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore e um ponteiro do no que substituiu o no removido //
 void removeFix(Node **root, Node *x);
+
+
+// Funcao que imprime a arvore em formato pre-ordem //
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore //
+void printPreOrder(Node **root);
+
+
+// Funcao que imprime a arvore em formato Em ordem //
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore //
+void printInOrder(Node **root);
+
+
+// Funcao que imprime a arvore em formato Pos-ordem //
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore //
+void printPosOrder(Node **root);
+
+
+// Funcao que gera uma arvore rubro-negra inicial //
+Node **initialRBTree();
 
 #endif
