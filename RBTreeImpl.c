@@ -338,3 +338,46 @@ void printPosOrder(Node **root) {
 		printf("%d -> ", (*root)->val);
 	}
 }
+
+Node **initialRBTree(){
+
+	// raiz da arvore
+    Node *root = genNode(13);
+    root->color = BLACK;
+
+    root->left = genNode(8);
+    
+
+    root->left->left = genNode(1);
+    root->left->left->color = BLACK;
+    
+    root->left->left->right = genNode(6);
+
+    root->left->right = genNode(11);
+    root->left->right->color = BLACK;
+
+    root->right = genNode(17);
+
+    root->right->left = genNode(15);
+    root->right->left->color = BLACK;
+
+    root->right->right = genNode(25);
+    root->right->right->color = BLACK;
+
+    root->right->right->left = genNode(22);
+
+    root->right->right->right = genNode(27);
+
+	/*
+		Arvore gerada
+										13(B)
+									   /     \
+									8(R)     17(R)
+									/  \     /   \
+								1(B) 11(B) 15(B) 25(B)
+								/           /      \
+              				 6(R)         22(R)    27(R)
+	*/
+
+    return &root;
+} 
