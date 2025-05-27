@@ -314,3 +314,27 @@ void removeRB(Node **root, int val){
 	if(yOriginalColor == BLACK)
 		removeFix(root, x);
 }
+
+void printPreOrder(Node **root) {
+	if (*root != NULL) {
+		printf("%d -> ", (*root)->val);
+		printPreOrder(&((*root)->left));
+		printPreOrder(&((*root)->right));
+	}
+}
+
+void printInOrder(Node **root) {
+	if (*root != NULL) {
+		printInOrder(&((*root)->left));
+		printf("%d -> ", (*root)->val);
+		printInOrder(&((*root)->right));
+	}
+}
+
+void printPosOrder(Node **root) {
+	if (*root != NULL) {
+		printPosOrder(&((*root)->left));
+		printPosOrder(&((*root)->right));
+		printf("%d -> ", (*root)->val);
+	}
+}
