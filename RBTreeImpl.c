@@ -375,8 +375,8 @@ Node **initialRBTree(){
       8(R)    17(R)
      /  \     /   \
    1(B) 11(B)15(B) 25(B)
-   /             /   \
- 6(R)          22(R) 27(R)
+   /  \           /   \
+     6(R)      22(R) 27(R)
 	*/
 
     return &root;
