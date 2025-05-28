@@ -94,4 +94,9 @@ void printPosOrder(Node **root);
 // Funcao que gera uma arvore rubro-negra inicial //
 Node **initialRBTree();
 
+
+// Funcao que inicializa o programa //
+void startProgram();
+
+
 #endif

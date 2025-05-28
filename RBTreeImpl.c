@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "RBTree.h"
 
@@ -342,7 +343,7 @@ void printPosOrder(Node **root) {
 Node **initialRBTree(){
 
 	// raiz da arvore
-    Node *root = genNode(13);
+    Node *root = genNode(13), **finalRoot;
     root->color = BLACK;
 
     root->left = genNode(8);
@@ -379,5 +380,56 @@ Node **initialRBTree(){
      6(R)      22(R) 27(R)
 	*/
 
-    return &root;
+	finalRoot = &root;
+
+    return finalRoot;
 } 
+
+void startProgram(){
+	Node **root = initialRBTree();
+	int option, val;
+
+	printf("\nVISUALIZACAO DA ARVORE RUBRO-NEGRA\n\nARVORE INICIAL:\n\n");
+	printInOrder(root);
+
+	do{
+		printf("\nDIGITE A OPCAO DA OPERACAO QUE DESEJA REALIZAR\n[1] - VISUALIZAR ARVORE\n[2] - ADICIONAR ELEMENTO NA ARVORE\n[3] - REMOVER ELEMENTO DA ARVORE\n[4] - ENCERRAR PROGRAMA");
+		scanf("%d", &option);
+
+		switch(option){
+			case 1:
+				printf("\n\nVISUALIZACAO DA ARVORE NAS TRES TRAVESSIAS:\n\n");
+				printf("\n\nEM PRE-ORDEM:\n");
+				printPreOrder(root);
+				printf("\n\nEM ORDEM:\n");
+				printInOrder(root);
+				printf("\n\nEM POS-ORDEM:\n");
+				printPosOrder(root);
+				putchar('\n');
+			break;
+			case 2:
+				printf("\n\nDIGITE O VALOR QUE DESEJA ADICIONAR NA ARVORE: ");
+				scanf("%d", &val);
+				
+				insertRB(root, val);
+				if(searchRB(*root, val))
+					printf("\nVALOR %d INSERIDO!\n\n", val);
+			break;
+			case 3:
+				printf("\n\nDIGITE O VALOR QUE DESEJA REMOVER DA ARVORE: ");
+				scanf("%d", &val);
+
+				removeRB(root, val);
+				if(!searchRB(*root, val))
+					printf("\n\nVALOR %d REMOVIDO!\\n\n", val);
+
+			break;
+			case 4:
+				printf("\n\nATE MAIS!\n\n");
+			break;
+			default:
+				printf("\nOPCAO INVALIDA!\n\n");
+			break;
+		}
+	}while(option != 4);
+}
