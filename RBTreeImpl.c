@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "RBTree.h"
 
 Node *genNode(int val){
@@ -57,7 +55,7 @@ void rightRotate(Node **root, Node *y){
 	y->parent = x;
 }
 
-Bool searchRB(Node *root, int val){
+bool searchRB(Node *root, int val){
 
 	while(root != NULL){
 		if(val < root->val)
@@ -186,7 +184,7 @@ void swapNodes(Node **root, Node *out, Node *in){
 
 void removeFix(Node **root, Node *x){
 	while (x != *root && (x == NULL || x->color == BLACK)) {
-		if (x == x->parent->left) {
+		if (x != NULL && x->parent != NULL && x == x->parent->left) {
 			Node *w = x->parent->right;  // irmão
 
 			// Caso 1: w eh vermelho
@@ -222,7 +220,7 @@ void removeFix(Node **root, Node *x){
 				x = *root;
 			}
 
-        	} else {
+		} else if(x != NULL && x->parent != NULL) {
 
 			// Simetrico ao caso acima (x eh filho da direita)
 			Node *w = x->parent->left;
@@ -253,11 +251,12 @@ void removeFix(Node **root, Node *x){
 				rightRotate(root, x->parent);
 				x = *root;
 			}
-		}
+		} else
+			break;
 	}
 
 	if (x != NULL)
-	x->color = BLACK;
+		x->color = BLACK;
 }
 
 void removeRB(Node **root, int val){
@@ -340,34 +339,20 @@ void printPosOrder(Node **root) {
 	}
 }
 
-Node **initialRBTree(){
 
-	// raiz da arvore
-    Node *root = genNode(13), **finalRoot;
-    root->color = BLACK;
+Node *initialRBTree(){
+    Node *root = NULL;
 
-    root->left = genNode(8);
-    
-
-    root->left->left = genNode(1);
-    root->left->left->color = BLACK;
-    
-    root->left->left->right = genNode(6);
-
-    root->left->right = genNode(11);
-    root->left->right->color = BLACK;
-
-    root->right = genNode(17);
-
-    root->right->left = genNode(15);
-    root->right->left->color = BLACK;
-
-    root->right->right = genNode(25);
-    root->right->right->color = BLACK;
-
-    root->right->right->left = genNode(22);
-
-    root->right->right->right = genNode(27);
+    insertRB(&root, 13);
+    insertRB(&root, 8);
+    insertRB(&root, 17);
+    insertRB(&root, 1);
+    insertRB(&root, 11);
+    insertRB(&root, 15);
+    insertRB(&root, 25);
+    insertRB(&root, 6);
+    insertRB(&root, 22);
+    insertRB(&root, 27);
 
 	/*
 		Arvore gerada
@@ -380,49 +365,54 @@ Node **initialRBTree(){
      6(R)      22(R) 27(R)
 	*/
 
-	finalRoot = &root;
-
-    return finalRoot;
-} 
+    return root;
+}
 
 void startProgram(){
-	Node **root = initialRBTree();
+	Node *root = initialRBTree();
 	int option, val;
 
-	printf("\nVISUALIZACAO DA ARVORE RUBRO-NEGRA\n\nARVORE INICIAL:\n\n");
-	printInOrder(root);
+	printf("\nVISUALIZACAO DA ARVORE RUBRO-NEGRA\n\nARVORE INICIAL (RAIZ: %d):\n\n", root->val);
+	printInOrder(&root);
 
 	do{
-		printf("\nDIGITE A OPCAO DA OPERACAO QUE DESEJA REALIZAR\n[1] - VISUALIZAR ARVORE\n[2] - ADICIONAR ELEMENTO NA ARVORE\n[3] - REMOVER ELEMENTO DA ARVORE\n[4] - ENCERRAR PROGRAMA");
+		printf("\nDIGITE A OPCAO DA OPERACAO QUE DESEJA REALIZAR\n[1] - VISUALIZAR ARVORE\n[2] - ADICIONAR ELEMENTO NA ARVORE\n[3] - REMOVER ELEMENTO DA ARVORE\n[4] - ENCERRAR PROGRAMA\n");
 		scanf("%d", &option);
 
 		switch(option){
 			case 1:
 				printf("\n\nVISUALIZACAO DA ARVORE NAS TRES TRAVESSIAS:\n\n");
+				printf("\nRAIZ = %d\n\n", root->val);
 				printf("\n\nEM PRE-ORDEM:\n");
-				printPreOrder(root);
+				printPreOrder(&root);
 				printf("\n\nEM ORDEM:\n");
-				printInOrder(root);
+				printInOrder(&root);
 				printf("\n\nEM POS-ORDEM:\n");
-				printPosOrder(root);
+				printPosOrder(&root);
 				putchar('\n');
 			break;
 			case 2:
 				printf("\n\nDIGITE O VALOR QUE DESEJA ADICIONAR NA ARVORE: ");
 				scanf("%d", &val);
 				
-				insertRB(root, val);
-				if(searchRB(*root, val))
+				if(searchRB(root, val))
+					printf("\nO VALOR %d JA EXISTE NA ARVORE!\n\n", val);
+				else{
+					insertRB(&root, val);
 					printf("\nVALOR %d INSERIDO!\n\n", val);
+				}
+
+
 			break;
 			case 3:
 				printf("\n\nDIGITE O VALOR QUE DESEJA REMOVER DA ARVORE: ");
 				scanf("%d", &val);
 
-				removeRB(root, val);
-				if(!searchRB(*root, val))
-					printf("\n\nVALOR %d REMOVIDO!\\n\n", val);
-
+				if(searchRB(root, val)){
+					removeRB(&root, val);
+					printf("\n\nVALOR %d REMOVIDO!\n\n", val);
+				} else
+					printf("\n\nO VALOR  %d NAO EXISTE NA ARVORE", val);
 			break;
 			case 4:
 				printf("\n\nATE MAIS!\n\n");

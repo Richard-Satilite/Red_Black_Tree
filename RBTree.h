@@ -1,19 +1,14 @@
 #ifndef RBTREE_H
 #define RBTREE_H
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 // Definindo dado do tipo Color //
 typedef enum Color{
 	RED,
 	BLACK
 }Color;
-
-
-// Definindo dado do tipo Bool //
-typedef enum {
-	false,
-	true
-}Bool;
 
 
 // Estrutura de um no da arvore rubro-negra //
@@ -53,7 +48,7 @@ void removeRB(Node **root, int val);
 
 // Funcao que realiza a busca de um valor na arvore //
 // Recebe um ponteiro que aponta para a raiz da arvore e o valor a ser buscado //
-Bool searchRB(Node *root, int val);
+bool searchRB(Node *root, int val);
 
 
 // Funcao que realiza a busca de um valor na arvore e retorna o no //
@@ -92,7 +87,7 @@ void printPosOrder(Node **root);
 
 
 // Funcao que gera uma arvore rubro-negra inicial //
-Node **initialRBTree();
+Node *initialRBTree();
 
 
 // Funcao que inicializa o programa //
