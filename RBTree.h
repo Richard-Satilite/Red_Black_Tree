@@ -67,8 +67,8 @@ void insertFix(Node **root, Node *z);
 
 
 // Funcao que efetua correcao de violacoes causadas pela remocao //
-// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore e um ponteiro do no que substituiu o no removido //
-void removeFix(Node **root, Node *x);
+// Recebe um ponteiro que aponta para o ponteiro da raiz da arvore, um ponteiro do no que substituiu o no removido e um ponteiro para o seu pai //
+void removeFix(Node **root, Node *x, Node *xParent);
 
 
 // Funcao que imprime a arvore em formato pre-ordem //
