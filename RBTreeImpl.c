@@ -184,23 +184,23 @@ void swapNodes(Node **root, Node *out, Node *in){
 
 void removeFix(Node **root, Node *x, Node *xParent){
 	while (x != *root && (x == NULL || x->color == BLACK)) {
-		if (x == (xParent != NULL ? xParent->left : NULL)) {
-			Node *w = (xParent != NULL) ? xParent->right : NULL;  // irmão
+		if (xParent != NULL && x == xParent->left) {
+			Node *w = xParent->right;  // irmão
 
 			// Caso 1: w eh vermelho
 			if (w != NULL && w->color == RED) {
 				w->color = BLACK;
 				xParent->color = RED;
 				leftRotate(root, xParent);
-				w = (xParent != NULL) ? xParent->right : NULL;
+				w = xParent->right;
 			}
 
 			// Caso 2: w eh preto e os dois filhos de w são pretos
 			if ((w == NULL) || ((w->left == NULL || w->left->color == BLACK) && (w->right == NULL || w->right->color == BLACK))) {
 				if(w != NULL)
 					w->color = RED;
-				x = x->parent;
-				xParent = x->parent;
+				x = xParent;
+				xParent = xParent->parent;
 		
 			} else {
 			
@@ -210,14 +210,13 @@ void removeFix(Node **root, Node *x, Node *xParent){
 						w->left->color = BLACK;
 					w->color = RED;
 					rightRotate(root, w);
-					w = (xParent != NULL) ? xParent->right : NULL;
+					w = xParent->right;
 				}
 
 				// Caso 4: w.right eh vermelho
 				if(w != NULL){
-					w->color = (xParent != NULL) ? xParent->color : BLACK;
-					if (xParent != NULL)
-						xParent->color = BLACK;
+					w->color = xParent->color;
+					xParent->color = BLACK;
 					if (w->right != NULL)
 						w->right->color = BLACK;
 					leftRotate(root, xParent);
@@ -234,27 +233,26 @@ void removeFix(Node **root, Node *x, Node *xParent){
 				w->color = BLACK;
 				xParent->color = RED;
 				rightRotate(root, xParent);
-				w = (xParent != NULL) ? xParent->left : NULL;
+				w = xParent->left;
 			}
 
 			if ((w != NULL) || ((w->right == NULL || w->right->color == BLACK) && (w->left == NULL || w->left->color == BLACK))) {
 				if(w != NULL)
 					w->color = RED;
-				x = x->parent;
-				xParent = x->parent;
+				x = xParent;
+				xParent = xParent->parent;
 			} else {
 				if (w->left == NULL || w->left->color == BLACK) {
 					if (w->right != NULL)
 						w->right->color = BLACK;
 					w->color = RED;
 					leftRotate(root, w);
-					w = (xParent != NULL) ? xParent->left : NULL;
+					w = xParent->left;
 				}
 				
 				if(w != NULL){
-					w->color = (xParent != NULL) ? xParent->color : BLACK;
-					if(xParent != NULL)
-						xParent->color = BLACK;
+					w->color = xParent->color;
+					xParent->color = BLACK;
 					if (w->left != NULL)
 						w->left->color = BLACK;
 					rightRotate(root, xParent);
@@ -276,8 +274,8 @@ void removeRB(Node **root, int val){
 
 	Node *y = z;
 	Color yOriginalColor = y->color;
-	Node *x;
-	Node *xParent;
+	Node *x = NULL;
+	Node *xParent = NULL;
 
 	// Caso 1: Z so tem no maximo um filho a direita
 	if(z->left == NULL){
@@ -307,13 +305,15 @@ void removeRB(Node **root, int val){
 		if(y->parent != z){
 			swapNodes(root, y, y->right);
 			y->right = z->right;
-			y->right->parent = y;
+			if(y->right != NULL)
+				y->right->parent = y;
 		}
 
 
 		swapNodes(root, z, y);
 		y->left = z->left;
-		y->left->parent = y;
+		if(y->left != NULL)
+			y->left->parent = y;
 		y->color = z->color;
 	}
 
