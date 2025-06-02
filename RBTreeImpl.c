@@ -136,7 +136,7 @@ void insertFix(Node **root, Node *z) {
 		}
 	}
 
-	// Raiz sempre preta
+	// Raiz eh sempre preta
 	(*root)->color = BLACK;
 }
 
@@ -183,150 +183,156 @@ void swapNodes(Node **root, Node *out, Node *in){
 }
 
 void removeFix(Node **root, Node *x, Node *xParent){
-	while (x != *root && (x == NULL || x->color == BLACK)) {
-		if (xParent != NULL && x == xParent->left) {
-			Node *w = xParent->right;  // irmão
+    while (x != *root && (x == NULL || x->color == BLACK)) {
+        if (xParent != NULL && x == xParent->left) {
+            Node *w = xParent->right;  // irmao
 
-			// Caso 1: w eh vermelho
-			if (w != NULL && w->color == RED) {
-				w->color = BLACK;
-				xParent->color = RED;
-				leftRotate(root, xParent);
-				w = xParent->right;
-			}
+            // Caso 1: irmao w eh vermelho
+            if (w != NULL && w->color == RED) {
+                w->color = BLACK;
+                xParent->color = RED;
+                leftRotate(root, xParent);
+                w = xParent->right;
+            }
 
-			// Caso 2: w eh preto e os dois filhos de w são pretos
-			if ((w == NULL) || ((w->left == NULL || w->left->color == BLACK) && (w->right == NULL || w->right->color == BLACK))) {
-				if(w != NULL)
-					w->color = RED;
-				x = xParent;
-				xParent = xParent->parent;
-		
-			} else {
-			
-				// Caso 3: w eh preto, w.left é vermelho e w.right é preto
-				if (w->right == NULL || w->right->color == BLACK) {
-					if (w->left != NULL)
-						w->left->color = BLACK;
-					w->color = RED;
-					rightRotate(root, w);
-					w = xParent->right;
-				}
+            // Caso 2: irmao w eh preto e ambos filhos de w sao pretos (ou NULL)
+            if ((w == NULL) || 
+                ((w->left == NULL || w->left->color == BLACK) && 
+                 (w->right == NULL || w->right->color == BLACK))) {
+                if(w != NULL)
+                    w->color = RED;
+                x = xParent;
+                xParent = x->parent;
+            } else {
+                // Caso 3: irmao w eh preto, filho esquerdo eh vermelho, filho direito eh preto
+                if (w->right == NULL || w->right->color == BLACK) {
+                    if (w->left != NULL)
+                        w->left->color = BLACK;
+                    w->color = RED;
+                    rightRotate(root, w);
+                    w = xParent->right;
+                }
 
-				// Caso 4: w.right eh vermelho
-				if(w != NULL){
-					w->color = xParent->color;
-					xParent->color = BLACK;
-					if (w->right != NULL)
-						w->right->color = BLACK;
-					leftRotate(root, xParent);
-				}
-				x = *root;
-			}
+                // Caso 4: irmao w eh preto e filho direito eh vermelho
+                if(w != NULL){
+                    w->color = xParent->color;
+                    xParent->color = BLACK;
+                    if (w->right != NULL)
+                        w->right->color = BLACK;
+                    leftRotate(root, xParent);
+                }
+                x = *root;
+            }
 
-		} else{
+        } else if (xParent != NULL) {
+            // Caso: x eh filho da direita
+            Node *w = xParent->left;  // irmao a esquerda
 
-			// Simetrico ao caso acima (x eh filho da direita)
-			Node *w = (xParent != NULL) ? xParent->left : NULL;
+            // Caso 1: irmao w eh vermelho
+            if (w != NULL && w->color == RED) {
+                w->color = BLACK;
+                xParent->color = RED;
+                rightRotate(root, xParent);
+                w = xParent->left;
+            }
 
-			if (w != NULL && w->color == RED) {
-				w->color = BLACK;
-				xParent->color = RED;
-				rightRotate(root, xParent);
-				w = xParent->left;
-			}
+            // Caso 2: irmao w eh preto e ambos filhos sao pretos
+            if ((w == NULL) || 
+                ((w->right == NULL || w->right->color == BLACK) && 
+                 (w->left == NULL || w->left->color == BLACK))) {
+                if(w != NULL)
+                    w->color = RED;
+                x = xParent;
+                xParent = x->parent;
+            } else {
+                // Caso 3: irmao w eh preto, filho direito eh vermelho, filho esquerdo eh preto
+                if (w->left == NULL || w->left->color == BLACK) {
+                    if (w->right != NULL)
+                        w->right->color = BLACK;
+                    w->color = RED;
+                    leftRotate(root, w);
+                    w = xParent->left;
+                }
+                
+                // Caso 4: irmao w eh preto e filho esquerdo eh vermelho
+                if(w != NULL){
+                    w->color = xParent->color;
+                    xParent->color = BLACK;
+                    if (w->left != NULL)
+                        w->left->color = BLACK;
+                    rightRotate(root, xParent);
+                }
+                x = *root;  // terminar o loop
+            }
+        } else {
+            break;
+        }
+    }
 
-			if ((w != NULL) || ((w->right == NULL || w->right->color == BLACK) && (w->left == NULL || w->left->color == BLACK))) {
-				if(w != NULL)
-					w->color = RED;
-				x = xParent;
-				xParent = xParent->parent;
-			} else {
-				if (w->left == NULL || w->left->color == BLACK) {
-					if (w->right != NULL)
-						w->right->color = BLACK;
-					w->color = RED;
-					leftRotate(root, w);
-					w = xParent->left;
-				}
-				
-				if(w != NULL){
-					w->color = xParent->color;
-					xParent->color = BLACK;
-					if (w->left != NULL)
-						w->left->color = BLACK;
-					rightRotate(root, xParent);
-				}
-				x = *root;
-			}
-		}
-	}
-
-	if (x != NULL)
-		x->color = BLACK;
+    if (x != NULL)
+        x->color = BLACK;
 }
 
 void removeRB(Node **root, int val){
-	Node *z = searchRBNode(*root, val);
+    Node *z = searchRBNode(*root, val);
 
-	if(z == NULL)
-		return;
+    if(z == NULL)
+        return;
 
-	Node *y = z;
-	Color yOriginalColor = y->color;
-	Node *x = NULL;
-	Node *xParent = NULL;
+    Node *y = z;
+    Color yOriginalColor = y->color;
+    Node *x = NULL;
+    Node *xParent = NULL;
 
-	// Caso 1: Z so tem no maximo um filho a direita
-	if(z->left == NULL){
-		x = z->right;
-		xParent =  z->parent;
-		swapNodes(root, z, z->right);
-	}
+    // Caso 1: Z tem no maximo filho a direita
+    if(z->left == NULL){
+        x = z->right;
+        xParent = z->parent;
+        swapNodes(root, z, z->right);
+    }
+    // Caso 2: Z tem no maximo filho a esquerda
+    else if(z->right == NULL){
+        x = z->left;
+        xParent = z->parent;
+        swapNodes(root, z, z->left);
+    }
+    // Caso 3: Z tem ambos os filhos
+    else{
+        // Encontrar sucessor (menor da subárvore direita)
+        y = z->right;
+        while(y->left != NULL)
+            y = y->left;
 
-	// Caso 2: Z so tem no maximo um filho a esquerda
-	else if(z->right == NULL){
-		x = z->left;
-		xParent =  z->parent;
-		swapNodes(root, z, z->left);
-	}
+        yOriginalColor = y->color;
+        x = y->right;
+        
+        if(y->parent == z){
+            xParent = y;
+        } else {
+            xParent = y->parent;
+            swapNodes(root, y, y->right);
+            y->right = z->right;
+            if(y->right != NULL)
+                y->right->parent = y;
+        }
 
-	// Case 3: Z tem os dois filhos
-	else{
-		// Assume o menor da subarvore a direita
-		y = z->right;
-		while(y->left != NULL)
-			y = y->left;
+        swapNodes(root, z, y);
+        y->left = z->left;
+        if(y->left != NULL)
+            y->left->parent = y;
+        y->color = z->color;
+    }
 
-		yOriginalColor = y->color;
-		x = y->right;
-		xParent = (y->parent == z) ? y : y->parent;
+    free(z);
 
-		if(y->parent != z){
-			swapNodes(root, y, y->right);
-			y->right = z->right;
-			if(y->right != NULL)
-				y->right->parent = y;
-		}
-
-
-		swapNodes(root, z, y);
-		y->left = z->left;
-		if(y->left != NULL)
-			y->left->parent = y;
-		y->color = z->color;
-	}
-
-	free(z);
-
-	// Se y era preto, pode ter ocorrido violacao
-	if(yOriginalColor == BLACK)
-		removeFix(root, x, xParent);
+    // Se o no removido era preto, pode ter ocorrido violacao
+    if(yOriginalColor == BLACK)
+        removeFix(root, x, xParent);
 }
 
 void printPreOrder(Node **root) {
 	if (*root != NULL) {
-		printf("%d -> ", (*root)->val);
+		printf("%d (%c) -> ", (*root)->val, (*root)->color == RED ? 'R' : 'B');
 		printPreOrder(&((*root)->left));
 		printPreOrder(&((*root)->right));
 	}
@@ -335,7 +341,7 @@ void printPreOrder(Node **root) {
 void printInOrder(Node **root) {
 	if (*root != NULL) {
 		printInOrder(&((*root)->left));
-		printf("%d -> ", (*root)->val);
+		printf("%d (%c) -> ", (*root)->val, (*root)->color == RED ? 'R' : 'B');
 		printInOrder(&((*root)->right));
 	}
 }
@@ -344,7 +350,7 @@ void printPosOrder(Node **root) {
 	if (*root != NULL) {
 		printPosOrder(&((*root)->left));
 		printPosOrder(&((*root)->right));
-		printf("%d -> ", (*root)->val);
+		printf("%d (%c) -> ", (*root)->val, (*root)->color == RED ? 'R' : 'B');
 	}
 }
 
